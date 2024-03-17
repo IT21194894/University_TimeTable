@@ -18,7 +18,7 @@ public class UserController {
 	@Autowired
 	private UserRepository userRepo;
 	
-	@GetMapping("/timetable")
+	@GetMapping("/uni_timetable")
 	public ResponseEntity<?> getAllUsers() {
 		
 		List<User> users=userRepo.findAll();

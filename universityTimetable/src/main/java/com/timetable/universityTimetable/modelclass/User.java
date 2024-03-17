@@ -12,7 +12,7 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection="timetable")
+@Document(collection="uni_timetable")
 
 public class User {
 	@Id
