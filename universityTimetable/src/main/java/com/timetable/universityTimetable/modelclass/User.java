@@ -26,18 +26,27 @@ public class User {
 	@NotNull(message= "userName cannot be null")
 	private String userName;
 	
+	@NotNull(message= "email cannot be null")
+	private String email;
+	
 	@NotNull(message= "password cannot be null")
 	private String password;
 	
 	@NotNull(message= "role cannot be null")
 	private String role;
 	
+	@NotNull(message= "nic cannot be null")
+	private String nic;
+	
+	
+	
 	@CreatedDate
 	private Date createdAt;
 	
 	@LastModifiedDate
 	private Date updatedAt;
-	//
+	
+	//Getters & Setters
 	public String getId() {
         return id;
     }
@@ -62,12 +71,27 @@ public class User {
         this.password = password;
     }
 
+    public String getEmail() {
+        return role;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+    
     public String getRole() {
         return role;
     }
 
     public void setRole(String role) {
         this.role = role;
+    }
+    public String getNic() {
+        return nic;
+    }
+
+    public void setNic(String nic) {
+        this.nic = nic;
     }
     
     public Date getCreatedAt() {

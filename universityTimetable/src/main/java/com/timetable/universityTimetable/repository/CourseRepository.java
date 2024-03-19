@@ -6,12 +6,13 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.timetable.universityTimetable.modelclass.User;
+import com.timetable.universityTimetable.modelclass.Course;
 
 @Repository
-public interface UserRepository extends MongoRepository<User, String> {
+public interface CourseRepository extends MongoRepository<Course, String> {
 
-	 @Query("{'nic': ?0}")
-	    Optional<User> findByNic(String nic);
-
+	@Query("{'courseCode': ?0}")
+    Optional<Course> findByCourseCode(String courseCode);
+	
+	void deleteByCourseCode(String courseCode);
 }

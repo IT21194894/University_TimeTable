@@ -2,11 +2,10 @@ package com.timetable.universityTimetable.controller;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
@@ -58,12 +57,15 @@ public class UserController {
 		
 		try {
 	    	userService.createUser(user);
-	        return new ResponseEntity<User>(user, HttpStatus.OK);
+	        //return new ResponseEntity<User>(user, HttpStatus.OK);
+	    	return ResponseEntity.ok().body(Map.of("message", "User registered successfully", "success", true));
 	    } catch (ConstraintViolationException e) {
 	        return new ResponseEntity<>("Error creating user: " + e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
 	    }catch (UserCollectionException e) {
 			return new ResponseEntity<>(e.getMessage(),HttpStatus.CONFLICT);
-		}
+	    	//return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("message", "User registration unsuccessful: " + e.getMessage(), "success", false));
+	    	
+	    }
 	}
 	
 	@GetMapping("/user/{id}")
@@ -71,33 +73,31 @@ public class UserController {
 		try {
 			return new ResponseEntity<>(userService.getUser(id), HttpStatus.OK);
 		} catch (Exception e) {
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", e.getMessage(), "success", false));
 		}
-		
-		
-		
 	}
 	
 	@PutMapping("/user/{id}")
 	public ResponseEntity<?> updateUserById(@PathVariable("id") String id, @RequestBody User user) {
 		try {
 			userService.updateUser(id, user);
-			return new ResponseEntity<>("Update User with ID : "+id, HttpStatus.OK);
+			//return new ResponseEntity<>("Update User with ID : "+id, HttpStatus.OK);
+			return ResponseEntity.ok().body(Map.of("message", "User registered successfully", "success", true));
 		} catch (ConstraintViolationException e) {
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
+			return new ResponseEntity<>("Error creating user: " + e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
 		}catch (UserCollectionException e) {
-			return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
-		}
-		
+			return ResponseEntity.status(HttpStatus.CONFLICT)
+                    .body(Map.of("message", "User registration unsuccessful: " + e.getMessage(), "success", false));
+		}	
 	}
 	
 	@DeleteMapping("/user/{id}")
 	public ResponseEntity<?> deleteUserById(@PathVariable("id") String id) {
 		try {
 			userService.deleteUserById(id);
-			return new ResponseEntity<>("Successfully deleted the record of Id: "+id,HttpStatus.OK);
+	        return new ResponseEntity<>("User with ID " + id + " deleted successfully", HttpStatus.OK);
 		} catch (UserCollectionException e) {
-			return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
+	        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
 		}
 	}
 

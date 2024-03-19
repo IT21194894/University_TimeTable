@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void createUser(User user) throws ConstraintViolationException, UserCollectionException {
-        Optional<User> userOptional = userRepo.findByUserName(user.getUserName());
+        Optional<User> userOptional = userRepo.findByNic(user.getNic());
         if (userOptional.isPresent()) {
             throw new UserCollectionException(UserCollectionException.UserAlreadyExist());
         } else {
@@ -55,14 +55,16 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void updateUser(String id, User user) throws UserCollectionException {
 		Optional<User> userOptId = userRepo.findById(id);
-		Optional<User> userOptUserName = userRepo.findByUserName(user.getUserName());
+		Optional<User> userOptNic = userRepo.findByNic(user.getNic());
         if (userOptId.isPresent()) {
-        	if(userOptUserName.isPresent()&& !userOptUserName.get().getId().equals(id)) {
+        	if(userOptNic.isPresent()&& !userOptNic.get().getId().equals(id)) {
         		throw new UserCollectionException(UserCollectionException.UserAlreadyExist());
         	}
         	
             User userUpdate= userOptId.get();
+            userUpdate.setNic(user.getNic());
             userUpdate.setUserName(user.getUserName());
+            userUpdate.setEmail(user.getEmail());
             userUpdate.setPassword(user.getPassword());
             userUpdate.setRole(user.getRole());
             userUpdate.setUpdatedAt  (new Date(System.currentTimeMillis()));

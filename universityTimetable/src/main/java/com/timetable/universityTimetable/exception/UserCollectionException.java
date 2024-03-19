@@ -18,6 +18,6 @@ public class UserCollectionException extends Exception {
 	}
 	
 	public static String UserAlreadyExist() {
-		return "User with given name already exist";
+		return "User with given NIC already exist";
 	}
 }
