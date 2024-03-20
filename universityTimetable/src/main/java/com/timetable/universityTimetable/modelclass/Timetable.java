@@ -17,7 +17,7 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection="timetable")
+@Document(collection="Timetable")
 public class Timetable {
 	@Id
 	private String ttid;
@@ -30,6 +30,9 @@ public class Timetable {
 	
 	@NotNull(message= "Faculty cannot be null")
 	private String facultyCode;
+	
+	@NotNull(message= "Location cannot be null")
+	private String location;
 	
 	@CreatedDate
 	private Date createdAt;
@@ -65,6 +68,14 @@ public class Timetable {
     
     public void setFacultyCode(String facultyCode) {
         this.facultyCode = facultyCode;
+    }
+    
+    public String getLocation() {
+        return location;
+    }
+    
+    public void setLocation(String location) {
+        this.location = location;
     }
     public Date getCreatedAt() {
         return createdAt;

@@ -47,29 +47,50 @@ public class CourseController {
 		return new ResponseEntity<>(courses,courses.size()>0 ? HttpStatus.OK : HttpStatus.NOT_FOUND);
 			
 	}
+//	@PostMapping("/course")
+//    public ResponseEntity<?> createCourse(@RequestBody @Valid Course course, @RequestParam String facultyCode, BindingResult result) {
+//        if (result.hasErrors()) {
+//            // If there are validation errors, return a response with the error details
+//            List<String> errors = result.getAllErrors().stream()
+//                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+//                    .collect(Collectors.toList());
+//            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+//        }
+//
+//        try {
+//            courseService.createCourse(course, facultyCode); // Pass the facultyCode to the service method
+//            return ResponseEntity.ok().body(Map.of("message", "Course assigned successfully", "success", true));
+//        } catch (ConstraintViolationException e) {
+//            return new ResponseEntity<>("Error creating course: " + e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
+//        } catch (CourseCollectionException e) {
+//            return ResponseEntity.status(HttpStatus.CONFLICT)
+//                    .body(Map.of("message", "Course assigned unsuccessful: " + e.getMessage(), "success", false));
+//        } catch (FacultyCollectionException e) { // Handle FacultyCollectionException
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body(Map.of("message", "Error creating course: " + e.getMessage(), "success", false));
+//        }
+//    }
 	@PostMapping("/course")
-    public ResponseEntity<?> createCourse(@RequestBody @Valid Course course, @RequestParam String facultyCode, BindingResult result) {
-        if (result.hasErrors()) {
-            // If there are validation errors, return a response with the error details
-            List<String> errors = result.getAllErrors().stream()
-                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
-                    .collect(Collectors.toList());
-            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
-        }
-
-        try {
-            courseService.createCourse(course, facultyCode); // Pass the facultyCode to the service method
-            return ResponseEntity.ok().body(Map.of("message", "Course registered successfully", "success", true));
-        } catch (ConstraintViolationException e) {
-            return new ResponseEntity<>("Error creating course: " + e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
-        } catch (CourseCollectionException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(Map.of("message", "Course registration unsuccessful: " + e.getMessage(), "success", false));
-        } catch (FacultyCollectionException e) { // Handle FacultyCollectionException
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("message", "Error creating course: " + e.getMessage(), "success", false));
-        }
-    }
+	public ResponseEntity<?> createCourse(@RequestBody @Valid  Course course,  BindingResult result) {
+		if (result.hasErrors()) {
+	        // If there are validation errors, return a response with the error details
+	        List<String> errors = result.getAllErrors().stream()
+	                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+	                .collect(Collectors.toList());
+	        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+	    }
+		try {
+			courseService.createCourse(course);
+	        //return new ResponseEntity<User>(user, HttpStatus.OK);
+	    	return ResponseEntity.ok().body(Map.of("message", "Course registered successfully", "success", true));
+	    } catch (ConstraintViolationException e) {
+	        return new ResponseEntity<>("Error creating Course: " + e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
+	    }catch (CourseCollectionException e) {
+			return new ResponseEntity<>(e.getMessage(),HttpStatus.CONFLICT);
+	    	//return ResponseEntity.status(HttpStatus.CONFLICT).body(Map.of("message", "User registration unsuccessful: " + e.getMessage(), "success", false));
+	    	
+	    }
+	}
 
 	
 	@GetMapping("/course/{cid}")

@@ -9,7 +9,9 @@ import com.timetable.universityTimetable.modelclass.Course;
 import jakarta.validation.ConstraintViolationException;
 
 public interface CourseService {
-	public void createCourse(Course course, String facultyCode)throws ConstraintViolationException, CourseCollectionException,FacultyCollectionException;
+	//public void createCourse(Course course, String facultyCode)throws ConstraintViolationException, CourseCollectionException,FacultyCollectionException;
+	public void createCourse(Course course) throws ConstraintViolationException, CourseCollectionException ;
+
 	public List<Course> getAllCourses();
 	
 	public Course getCourse(String courseCode) throws CourseCollectionException;

@@ -8,12 +8,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.timetable.universityTimetable.exception.FacultyCollectionException;
 import com.timetable.universityTimetable.exception.TimeTableCollectionException;
-import com.timetable.universityTimetable.exception.UserCollectionException;
-import com.timetable.universityTimetable.modelclass.Faculty;
 import com.timetable.universityTimetable.modelclass.Timetable;
-import com.timetable.universityTimetable.modelclass.User;
 import com.timetable.universityTimetable.repository.TimeTableRepository;
 
 import jakarta.validation.ConstraintViolationException;
@@ -46,7 +42,7 @@ public class TimeTableServiceImpl implements TimeTableService {
 	}
 
 	@Override
-	public void updateCourse(String ttid, Timetable timetable) throws TimeTableCollectionException{
+	public void updateTimetable(String ttid, Timetable timetable) throws TimeTableCollectionException{
 		Optional<Timetable> timeTablesOptId = timeTableRepo.findById(ttid);
         if (timeTablesOptId.isPresent()) {
         	
@@ -74,6 +70,16 @@ public class TimeTableServiceImpl implements TimeTableService {
 			timeTableRepo.deleteById(ttid);
 		}
 
+	}
+
+	@Override
+	public Timetable getTimetable(String ttid) throws TimeTableCollectionException {
+		Optional<Timetable> timeOpt = timeTableRepo.findById(ttid);
+		if(!timeOpt.isPresent()) {
+			throw new TimeTableCollectionException(TimeTableCollectionException.NotFoundException(ttid));
+		}else {
+			return timeOpt.get();
+		}
 	}
 
 }

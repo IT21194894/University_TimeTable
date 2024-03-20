@@ -1,114 +1,118 @@
 package com.timetable.universityTimetable.modelclass;
-
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
-import org.springframework.data.annotation.CreatedDate;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-@Setter
-@Getter
-@AllArgsConstructor
-@NoArgsConstructor
-@Document(collection="user")
-
+@Document(collection = "users")
 public class User {
-	@Id
-	private String id;
-	
-	@NotNull(message= "userName cannot be null")
-	private String userName;
-	
-	@NotNull(message= "email cannot be null")
-	private String email;
-	
-	@NotNull(message= "password cannot be null")
-	private String password;
-	
-	@NotNull(message= "role cannot be null")
-	private String role;
-	
-	@NotNull(message= "nic cannot be null")
-	private String nic;
-	
-	
-	
-	@CreatedDate
-	private Date createdAt;
-	
-	@LastModifiedDate
-	private Date updatedAt;
-	
-	//Getters & Setters
-	public String getId() {
-        return id;
-    }
+	 @Id
+	  private String id;
 
-    public void setId(String id) {
-        this.id = id;
-    }
+	  @NotBlank
+	  @Size(max = 20)
+	  private String username;
 
-    public String getUserName() {
-        return userName;
-    }
+	  @NotBlank
+	  @Size(max = 50)
+	  @Email
+	  private String email;
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
+	  @NotBlank
+	  @Size(max = 120)
+	  private String password;
+	  
+	  
+	  @NotBlank
+	  @Size(max = 12)
+	  private String nic;
+	  
+	  private Date createdAt;
+	  
+	  private Date updatedAt;
 
-    public String getPassword() {
-        return password;
-    }
+	  @DBRef
+	  private Set<Role> roles = new HashSet<>();
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	  public User() {
+	  }
 
-    public String getEmail() {
-        return role;
-    }
+	  public User(String username, String email, String password, String nic) {
+	    this.username = username;
+	    this.email = email;
+	    this.password = password;
+	    this.nic = nic;
+	  }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-    
-    public String getRole() {
-        return role;
-    }
+	  public String getId() {
+	    return id;
+	  }
 
-    public void setRole(String role) {
-        this.role = role;
-    }
-    public String getNic() {
-        return nic;
-    }
+	  public void setId(String id) {
+	    this.id = id;
+	  }
 
-    public void setNic(String nic) {
-        this.nic = nic;
-    }
-    
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-    
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-    
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
+	  public String getUsername() {
+	    return username;
+	  }
 
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-	
-	
+	  public void setUsername(String username) {
+	    this.username = username;
+	  }
+
+	  public String getEmail() {
+	    return email;
+	  }
+
+	  public void setEmail(String email) {
+	    this.email = email;
+	  }
+
+	  public String getPassword() {
+	    return password;
+	  }
+
+	  public void setPassword(String password) {
+	    this.password = password;
+	  }
+
+	  public Set<Role> getRoles() {
+	    return roles;
+	  }
+
+	  public void setRoles(Set<Role> roles) {
+	    this.roles = roles;
+	  }
+	  
+	  public String getNic() {
+		    return nic;
+		  }
+
+		  public void setNic(String nic) {
+		    this.nic = nic;
+		  }
+		  
+		  public Date getCreatedAt() {
+		        return createdAt;
+		    }
+		    
+		    public void setCreatedAt(Date createdAt) {
+		        this.createdAt = createdAt;
+		    }
+		    
+		    public Date getUpdatedAt() {
+		        return updatedAt;
+		    }
+
+		    public void setUpdatedAt(Date updatedAt) {
+		        this.updatedAt = updatedAt;
+		    }
+
 }

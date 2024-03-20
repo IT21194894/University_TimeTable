@@ -63,10 +63,9 @@ public class UserServiceImpl implements UserService {
         	
             User userUpdate= userOptId.get();
             userUpdate.setNic(user.getNic());
-            userUpdate.setUserName(user.getUserName());
+            userUpdate.setUsername(user.getUsername());
             userUpdate.setEmail(user.getEmail());
             userUpdate.setPassword(user.getPassword());
-            userUpdate.setRole(user.getRole());
             userUpdate.setUpdatedAt  (new Date(System.currentTimeMillis()));
             userRepo.save(userUpdate);
         } else {

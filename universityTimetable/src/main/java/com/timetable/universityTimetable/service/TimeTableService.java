@@ -12,9 +12,9 @@ public interface TimeTableService {
 	public void createTimeTable(Timetable timeTable)throws ConstraintViolationException, TimeTableCollectionException;
 	public List<Timetable> getAllTimetables();
 	
-	//public Timetable getCourse(String courseCode) throws TimeLimitExceededException;
+	public Timetable getTimetable(String ttid) throws TimeTableCollectionException;
 	
-	public void updateCourse(String ttid, Timetable timetable) throws TimeTableCollectionException;
+	public void updateTimetable(String ttid, Timetable timetable) throws TimeTableCollectionException;
 	
 	public void deleteByTtid(String ttid) throws TimeTableCollectionException;
 }

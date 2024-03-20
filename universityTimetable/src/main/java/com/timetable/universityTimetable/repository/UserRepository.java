@@ -13,5 +13,11 @@ public interface UserRepository extends MongoRepository<User, String> {
 
 	 @Query("{'nic': ?0}")
 	    Optional<User> findByNic(String nic);
+	 
+	  Boolean existsByUsername(String username);
+
+	  Boolean existsByEmail(String email);
+	  
+	  Optional <User>findByUsername(String username);
 
 }
