@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,12 +28,12 @@ import com.timetable.universityTimetable.modelclass.User;
 import com.timetable.universityTimetable.repository.CourseRepository;
 import com.timetable.universityTimetable.repository.UserRepository;
 import com.timetable.universityTimetable.service.CourseService;
-import com.timetable.universityTimetable.service.UserService;
 
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 
 @RestController
+@RequestMapping("/api/auth")
 public class CourseController {
 	@Autowired
 	private CourseRepository courseRepo;
@@ -41,6 +43,7 @@ public class CourseController {
 
 	
 	@GetMapping("/course")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> getAllUsers() {
 
 		List<Course> courses=courseService.getAllCourses();
@@ -71,6 +74,7 @@ public class CourseController {
 //        }
 //    }
 	@PostMapping("/course")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> createCourse(@RequestBody @Valid  Course course,  BindingResult result) {
 		if (result.hasErrors()) {
 	        // If there are validation errors, return a response with the error details

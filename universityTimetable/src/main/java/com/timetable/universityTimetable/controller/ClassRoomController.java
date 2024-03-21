@@ -15,21 +15,23 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.timetable.universityTimetable.exception.UniTimetableCollectionException;
 import com.timetable.universityTimetable.exception.UserCollectionException;
-import com.timetable.universityTimetable.modelclass.ClassroomMgtAndBooking;
+import com.timetable.universityTimetable.modelclass.Classroom;
 import com.timetable.universityTimetable.modelclass.User;
 import com.timetable.universityTimetable.repository.ClassRoomMgtAndBooikingRepository;
 import com.timetable.universityTimetable.repository.UserRepository;
 import com.timetable.universityTimetable.service.ClassroomMgtAndBookingService;
-import com.timetable.universityTimetable.service.UserService;
+//import com.timetable.universityTimetable.service.UserService;
 
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
 
 @RestController
+@RequestMapping("/api/auth")
 public class ClassRoomController {
 	
 	@Autowired
@@ -41,12 +43,12 @@ public class ClassRoomController {
 	@GetMapping("/classroom")
 	public ResponseEntity<?> getAllClassRooms() {
 
-		List<ClassroomMgtAndBooking> classRooms=classService.getAllClassRooms();
+		List<Classroom> classRooms=classService.getAllClassRooms();
 		return new ResponseEntity<>(classRooms,classRooms.size()>0 ? HttpStatus.OK : HttpStatus.NOT_FOUND);
 			
 	}
 	@PostMapping("/classroom")
-	public ResponseEntity<?> createUser(@RequestBody @Valid  ClassroomMgtAndBooking classRooms,  BindingResult result) {
+	public ResponseEntity<?> createUser(@RequestBody @Valid  Classroom classRooms,  BindingResult result) {
 		if (result.hasErrors()) {
 	        // If there are validation errors, return a response with the error details
 	        List<String> errors = result.getAllErrors().stream()
@@ -78,7 +80,7 @@ public class ClassRoomController {
 	}
 	
 	@PutMapping("/classroom/{classid}")
-	public ResponseEntity<?> updateClassById(@PathVariable("classid") String classid, @RequestBody ClassroomMgtAndBooking classroom) {
+	public ResponseEntity<?> updateClassById(@PathVariable("classid") String classid, @RequestBody Classroom classroom) {
 		try {
 			classService.updateClassroom(classid, classroom);
 			//return new ResponseEntity<>("Update User with ID : "+id, HttpStatus.OK);

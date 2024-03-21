@@ -47,6 +47,7 @@ public class CourseServiceImpl implements CourseService {
 //	    }
 		
 		public void createCourse(Course course) throws ConstraintViolationException, CourseCollectionException {
+		
 	        Optional<Course> courseOptional = courseRepo.findByCourseCode(course.getCourseCode());
 	        if (courseOptional.isPresent()) {
 	            throw new CourseCollectionException(CourseCollectionException.CourseAlreadyExist());

@@ -2,45 +2,46 @@ package com.timetable.universityTimetable.response;
 
 import java.util.List;
 
-
 public class UserInfoResponse {
-	 private String id;
-	  private String username;
-	  private String email;
-	  private List<String> roles;
+  private String id;
+  private String username;
+  private String email;
+  private List<String> roles;
 
-	  public UserInfoResponse(String id, String username, String email, List<String> roles) {
-	    this.id = id;
-	    this.username = username;
-	    this.email = email;
-	    this.roles = roles;
-	  }
 
-	  public String getId() {
-	    return id;
-	  }
+  public UserInfoResponse(String id, String username, String email, List<String> roles ) {
+    this.id = id;
+    this.username = username;
+    this.email = email;
+    this.roles = roles;
+  }
 
-	  public void setId(String id) {
-	    this.id = id;
-	  }
+  public String getId() {
+    return id;
+  }
 
-	  public String getEmail() {
-	    return email;
-	  }
+  public void setId(String id) {
+    this.id = id;
+  }
 
-	  public void setEmail(String email) {
-	    this.email = email;
-	  }
+  public String getEmail() {
+    return email;
+  }
 
-	  public String getUsername() {
-	    return username;
-	  }
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
-	  public void setUsername(String username) {
-	    this.username = username;
-	  }
+  public String getUsername() {
+    return username;
+  }
 
-	  public List<String> getRoles() {
-	    return roles;
-	  }
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  public List<String> getRoles() {
+    return roles;
+  }
+
 }

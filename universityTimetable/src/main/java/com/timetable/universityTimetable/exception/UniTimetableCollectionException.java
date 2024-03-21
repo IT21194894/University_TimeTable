@@ -18,5 +18,13 @@ public class UniTimetableCollectionException extends Exception {
 	public static String ClassRoomAlreadyExist() {
 		return "ClassRoom with given id already exist";
 	}
+	public static String BookingAlreadyExist() {
+		return "Booking with given id already exist";
+	}
+	
+	public static String EnrollmentAlreadyExist() {
+		return "Student Already Enrolled";
+	}
+	
 
 }

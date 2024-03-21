@@ -17,84 +17,75 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection="Timetable")
-public class Timetable {
+@Document(collection="bookings")
+public class Booking {
+	
 	@Id
-	private String ttid;
+	private String bookid;
 	
-	@NotNull(message= "Course cannot be null")
-	private String courseCode;
+	@NotNull(message= "Day cannot be null")
+	private String day;
 	
-	@NotNull(message= "Time cannot be null")
+	@NotNull(message= "start time cannot be null")
 	private String startTime;
-	@NotNull(message= "Time cannot be null")
+	
+	@NotNull(message= "End time cannot be null")
 	private String endTime;
 	
-	@NotNull(message= "Faculty cannot be null")
-	private String facultyCode;
-	
-	@NotNull(message= "ClassCode cannot be null")
+	@NotNull(message= "location cannot be null")
 	private String classCode;
 	
 	@CreatedDate
-	private Date createdAt;
-	
-	@LastModifiedDate
-	private Date updatedAt;
-	
-	public String getTtid() {
-        return ttid;
+    private Date createdAt;
+
+    @LastModifiedDate
+    private Date updatedAt;
+
+    // Getters & Setters
+    public String getBookid() {
+        return bookid;
     }
 
-    public void setTtid(String ttid) {
-        this.ttid = ttid;
+    public void setBookid(String bookid) {
+        this.bookid = bookid;
+    }
+
+    public String getDay() {
+        return day;
+    }
+
+    public void setDay(String day) {
+        this.day = day;
     }
     
-    public String getCourseCode() {
-        return courseCode;
-    }
-    
-    public void setCourseCode(String courseCode) {
-        this.courseCode = courseCode;
-    }
     public String getStartTime() {
         return startTime;
     }
-    
+
     public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
-    
     public String getEndTime() {
         return endTime;
     }
-    
+
     public void setEndTime(String endTime) {
         this.endTime = endTime;
     }
-    public String getFacultyCode() {
-        return facultyCode;
-    }
-    
-    public void setFacultyCode(String facultyCode) {
-        this.facultyCode = facultyCode;
-    }
-    
     public String getClassCode() {
         return classCode;
     }
-    
+
     public void setClassCode(String classCode) {
         this.classCode = classCode;
     }
     public Date getCreatedAt() {
         return createdAt;
     }
-    
+
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
-    
     public Date getUpdatedAt() {
         return updatedAt;
     }
@@ -102,5 +93,5 @@ public class Timetable {
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
-    
+
 }

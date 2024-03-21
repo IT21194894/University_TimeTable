@@ -47,9 +47,11 @@ public class TimeTableServiceImpl implements TimeTableService {
         if (timeTablesOptId.isPresent()) {
         	
         	Timetable timetableUpdate= timeTablesOptId.get();
-        	timetableUpdate.setTime(timetable.getTime());
+        	timetableUpdate.setStartTime(timetable.getStartTime());
+        	timetableUpdate.setEndTime(timetable.getEndTime());
         	timetableUpdate.setFacultyCode(timetable.getFacultyCode());
         	timetableUpdate.setCourseCode(timetable.getCourseCode());
+        	timetableUpdate.setClassCode(timetable.getClassCode());
 //        	timetableUpdate.setPassword(timetable.get());
         	timetableUpdate.setUpdatedAt  (new Date(System.currentTimeMillis()));
         	timeTableRepo.save(timetableUpdate);
@@ -81,5 +83,7 @@ public class TimeTableServiceImpl implements TimeTableService {
 			return timeOpt.get();
 		}
 	}
+	
+	
 
 }

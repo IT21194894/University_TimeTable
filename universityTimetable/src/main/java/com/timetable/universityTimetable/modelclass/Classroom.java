@@ -18,20 +18,18 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Document(collection="classroom")
-public class ClassroomMgtAndBooking {
+public class Classroom {
 	@Id
     private String classid;
 
     @NotNull(message = "Classroom Code cannot be null")
     private String classroomCode;
 
-    @NotNull(message = "Classroom Name cannot be null")
-    private String classroomName;
-
-    // Additional fields for classroom management
+    @NotNull(message = "capacity Code cannot be null")
     private int capacity;
+    
+    @NotNull(message = "projector availability cannot be null")
     private boolean projectorAvailable;
-    // Add more fields as needed for specific requirements
 
     @CreatedDate
     private Date createdAt;
@@ -54,14 +52,6 @@ public class ClassroomMgtAndBooking {
 
     public void setClassroomCode(String classroomCode) {
         this.classroomCode = classroomCode;
-    }
-
-    public String getClassroomName() {
-        return classroomName;
-    }
-
-    public void setClassroomName(String classroomName) {
-        this.classroomName = classroomName;
     }
 
     public int getCapacity() {

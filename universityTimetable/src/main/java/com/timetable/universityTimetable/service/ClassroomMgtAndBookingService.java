@@ -4,17 +4,17 @@ import java.util.List;
 
 
 import com.timetable.universityTimetable.exception.UniTimetableCollectionException;
-import com.timetable.universityTimetable.modelclass.ClassroomMgtAndBooking;
+import com.timetable.universityTimetable.modelclass.Classroom;
 
 import jakarta.validation.ConstraintViolationException;
 
 public interface ClassroomMgtAndBookingService {
-	public void createClassroom(ClassroomMgtAndBooking classRoom)throws ConstraintViolationException, UniTimetableCollectionException;
-	public List<ClassroomMgtAndBooking> getAllClassRooms();
+	public void createClassroom(Classroom classRoom)throws ConstraintViolationException, UniTimetableCollectionException;
+	public List<Classroom> getAllClassRooms();
 	
-	public ClassroomMgtAndBooking getClassroom(String classroomCode) throws UniTimetableCollectionException;
+	public Classroom getClassroom(String classroomCode) throws UniTimetableCollectionException;
 	
-	public void updateClassroom(String classroomCode, ClassroomMgtAndBooking course) throws UniTimetableCollectionException;
+	public void updateClassroom(String classroomCode, Classroom course) throws UniTimetableCollectionException;
 	
 	public void deleteByClassroomCode(String classroomCode) throws UniTimetableCollectionException;
 

@@ -6,13 +6,13 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 import org.springframework.stereotype.Repository;
 
-import com.timetable.universityTimetable.modelclass.ClassroomMgtAndBooking;
+import com.timetable.universityTimetable.modelclass.Classroom;
 
 
 @Repository
-public interface ClassRoomMgtAndBooikingRepository extends MongoRepository<ClassroomMgtAndBooking, String>{
+public interface ClassRoomMgtAndBooikingRepository extends MongoRepository<Classroom, String>{
 	@Query("{'classroomCode': ?0}")
-    Optional<ClassroomMgtAndBooking> findByClassroomCode(String classroomCode);
+    Optional<Classroom> findByClassroomCode(String classroomCode);
 	
 	void deleteByClassroomCode(String classroomCode);
 }
