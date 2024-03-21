@@ -8,7 +8,7 @@ import com.timetable.universityTimetable.modelclass.Classroom;
 
 import jakarta.validation.ConstraintViolationException;
 
-public interface ClassroomMgtAndBookingService {
+public interface ClassroomService {
 	public void createClassroom(Classroom classRoom)throws ConstraintViolationException, UniTimetableCollectionException;
 	public List<Classroom> getAllClassRooms();
 	

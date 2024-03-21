@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.timetable.universityTimetable.exception.UniTimetableCollectionException;
 import com.timetable.universityTimetable.modelclass.Enrollment;
+import com.timetable.universityTimetable.repository.CourseRepository;
 import com.timetable.universityTimetable.repository.EnrollmentRepository;
+import com.timetable.universityTimetable.repository.UserRepository;
 import com.timetable.universityTimetable.service.EnrollmentService;
 
 import jakarta.validation.ConstraintViolationException;
@@ -35,10 +37,20 @@ public class EnrollmentController {
 	    @Autowired
 	    private EnrollmentService enrollmentService;
 	    
+	    @Autowired
+	    private UserRepository studentRepository;
+	    
+	    @Autowired
+	    private CourseRepository courseRepository;
+	    
 	    @GetMapping("/enrollment")
 	    public ResponseEntity<?> getAllEnrollments() {
-	        List<Enrollment> enrollments = enrollmentService.getAllEnrollments();
-	        return new ResponseEntity<>(enrollments, enrollments.size() > 0 ? HttpStatus.OK : HttpStatus.NOT_FOUND);
+	    	List<Enrollment> enrollments = enrollmentRepo.findAll();
+	        if (enrollments.size() > 0) {
+	            return new ResponseEntity<List<Enrollment>>(enrollments, HttpStatus.OK);
+	        } else {
+	            return new ResponseEntity("No enrollments available", HttpStatus.NOT_FOUND);
+	        }
 	    }
 
 	    @PostMapping("/enrollment")
@@ -71,19 +83,19 @@ public class EnrollmentController {
 	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("message", e.getMessage(), "success", false));
 	        }
 	    }
-
-	    @PutMapping("/enrollment/{enrollId}")
-	    public ResponseEntity<?> updateEnrollment(@PathVariable("enrollId") String enrollId, @RequestBody Enrollment enrollment) {
-	        try {
-	            enrollmentService.updateEnrollment(enrollId, enrollment);
-	            return ResponseEntity.ok().body(Map.of("message", "Enrollment updated successfully", "success", true));
-	        } catch (ConstraintViolationException e) {
-	            return new ResponseEntity<>("Error updating enrollment: " + e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
-	        } catch (UniTimetableCollectionException e) {
-	            return ResponseEntity.status(HttpStatus.CONFLICT)
-	                    .body(Map.of("message", "Enrollment updating unsuccessful: " + e.getMessage(), "success", false));
-	        }
-	    }
+//
+//	    @PutMapping("/enrollment/{enrollId}")
+//	    public ResponseEntity<?> updateEnrollment(@PathVariable("enrollId") String enrollId, @RequestBody Enrollment enrollment) {
+//	        try {
+//	            enrollmentService.updateEnrollment(enrollId, enrollment);
+//	            return ResponseEntity.ok().body(Map.of("message", "Enrollment updated successfully", "success", true));
+//	        } catch (ConstraintViolationException e) {
+//	            return new ResponseEntity<>("Error updating enrollment: " + e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
+//	        } catch (UniTimetableCollectionException e) {
+//	            return ResponseEntity.status(HttpStatus.CONFLICT)
+//	                    .body(Map.of("message", "Enrollment updating unsuccessful: " + e.getMessage(), "success", false));
+//	        }
+//	    }
 
 	    @DeleteMapping("/enrollment/{enrollId}")
 	    public ResponseEntity<?> deleteEnrollment(@PathVariable("enrollId") String enrollId) {

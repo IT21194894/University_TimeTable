@@ -10,6 +10,8 @@ import jakarta.validation.ConstraintViolationException;
 public interface BookingService {
 public void createBooking(Booking booking)throws ConstraintViolationException, UniTimetableCollectionException;
 	
+boolean checkClassroomAvailability(String classroomName, String startTimeStr, String endTimeStr, String dayOfWeekStr);
+
 	public List<Booking> getAllBookings();
 	
 	public Booking getBooking(String bookid) throws UniTimetableCollectionException;

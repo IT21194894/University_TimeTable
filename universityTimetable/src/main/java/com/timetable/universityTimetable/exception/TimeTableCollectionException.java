@@ -12,11 +12,11 @@ public class TimeTableCollectionException extends Exception {
 	}
 	
 	public static String NotFoundException(String ttid) {
-		return "Course with " + ttid+" not found";
+		return "TimeTable with " + ttid+" not found";
 	}
 	
 	public static String TimeTableAlreadyExist() {
-		return "Course with given Course Id already exist";
+		return "TimeTable Id already exist";
 	}
 
 }

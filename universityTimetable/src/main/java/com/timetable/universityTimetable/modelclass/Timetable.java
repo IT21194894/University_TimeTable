@@ -25,9 +25,13 @@ public class Timetable {
 	@NotNull(message= "Course cannot be null")
 	private String courseCode;
 	
-	@NotNull(message= "Time cannot be null")
+
+	private String day;
+	
+	@NotNull(message= "Start Time cannot be null")
 	private String startTime;
-	@NotNull(message= "Time cannot be null")
+	
+	@NotNull(message= "End Time cannot be null")
 	private String endTime;
 	
 	@NotNull(message= "Faculty cannot be null")

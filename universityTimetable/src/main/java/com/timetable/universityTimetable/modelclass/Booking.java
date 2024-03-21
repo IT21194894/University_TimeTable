@@ -23,6 +23,10 @@ public class Booking {
 	@Id
 	private String bookid;
 	
+	
+	@NotNull(message = "Booking Type Can't input null value")
+	private String bookingType;
+
 	@NotNull(message= "Day cannot be null")
 	private String day;
 	
@@ -34,6 +38,12 @@ public class Booking {
 	
 	@NotNull(message= "location cannot be null")
 	private String classCode;
+	
+	@NotNull(message = "Can't input null value")
+	private String bookedBy;
+	
+	@NotNull(message = "Can't input null value")
+    private String purpose;
 	
 	@CreatedDate
     private Date createdAt;
@@ -58,6 +68,14 @@ public class Booking {
         this.day = day;
     }
     
+    public String getBookingType() {
+		return bookingType;
+	}
+
+	public void setBookingType(String bookingType) {
+		this.bookingType = bookingType;
+	}
+    
     public String getStartTime() {
         return startTime;
     }
@@ -79,6 +97,23 @@ public class Booking {
     public void setClassCode(String classCode) {
         this.classCode = classCode;
     }
+    
+    public String getBookedBy() {
+		return bookedBy;
+	}
+
+	public void setBookedBy(String bookedBy) {
+		this.bookedBy = bookedBy;
+	}
+	
+	public String getPurpose() {
+		return purpose;
+	}
+
+	public void setPurpose(String purpose) {
+		this.purpose = purpose;
+	}
+	
     public Date getCreatedAt() {
         return createdAt;
     }

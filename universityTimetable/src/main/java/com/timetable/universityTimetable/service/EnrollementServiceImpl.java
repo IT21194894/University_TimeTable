@@ -62,26 +62,26 @@ public class EnrollementServiceImpl implements EnrollmentService {
 	        }
 	}
 
-	@Override
-	public void updateEnrollment(String enrollid, Enrollment enrollment) throws UniTimetableCollectionException {
-		Optional<Enrollment> enrollmentOpt = enrollmentRepo.findById(enrollid);
-        if (enrollmentOpt.isPresent()) {
-            Enrollment updatedEnrollment = enrollmentOpt.get();
-         // Check if the course with the given courseCode exists
-            Optional<Course> course = courseRepo.findByCourseCode(enrollment.getCourseCode());
-            if (!course.isPresent()) {
-                throw new UniTimetableCollectionException("Course with code " + enrollment.getCourseCode() + " not found");
-            }
-            updatedEnrollment.setCourseCode(enrollment.getCourseCode()); // Replace "Field1" with the actual field name to be updated
-            updatedEnrollment.setStudId(enrollment.getStudId()); // Replace "Field2" with the actual field name to be updated
-            // Repeat the above for all fields that need to be updated
-            updatedEnrollment.setUpdatedAt(new Date(System.currentTimeMillis()));
-            enrollmentRepo.save(updatedEnrollment);
-        } else {
-            throw new UniTimetableCollectionException(UniTimetableCollectionException.NotFoundException(enrollid));
-        }
-
-	}
+//	@Override
+//	public void updateEnrollment(String enrollid, Enrollment enrollment) throws UniTimetableCollectionException {
+//		Optional<Enrollment> enrollmentOpt = enrollmentRepo.findById(enrollid);
+//        if (enrollmentOpt.isPresent()) {
+//            Enrollment updatedEnrollment = enrollmentOpt.get();
+//         // Check if the course with the given courseCode exists
+//            Optional<Course> course = courseRepo.findByCourseCode(enrollment.getCourseCode());
+//            if (!course.isPresent()) {
+//                throw new UniTimetableCollectionException("Course with code " + enrollment.getCourseCode() + " not found");
+//            }
+//            updatedEnrollment.setCourseCode(enrollment.getCourseCode()); // Replace "Field1" with the actual field name to be updated
+//            updatedEnrollment.setStudId(enrollment.getStudId()); // Replace "Field2" with the actual field name to be updated
+//            // Repeat the above for all fields that need to be updated
+//            updatedEnrollment.setUpdatedAt(new Date(System.currentTimeMillis()));
+//            enrollmentRepo.save(updatedEnrollment);
+//        } else {
+//            throw new UniTimetableCollectionException(UniTimetableCollectionException.NotFoundException(enrollid));
+//        }
+//
+//	}
 
 	@Override
 	public void deleteEnrollment(String enrollid) throws UniTimetableCollectionException {

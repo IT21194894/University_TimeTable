@@ -21,12 +21,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.timetable.universityTimetable.exception.CourseCollectionException;
-import com.timetable.universityTimetable.exception.FacultyCollectionException;
-import com.timetable.universityTimetable.exception.UserCollectionException;
 import com.timetable.universityTimetable.modelclass.Course;
-import com.timetable.universityTimetable.modelclass.User;
 import com.timetable.universityTimetable.repository.CourseRepository;
-import com.timetable.universityTimetable.repository.UserRepository;
 import com.timetable.universityTimetable.service.CourseService;
 
 import jakarta.validation.ConstraintViolationException;
@@ -43,7 +39,7 @@ public class CourseController {
 
 	
 	@GetMapping("/course")
-	@PreAuthorize("hasRole('ADMIN')")
+	@PreAuthorize("hasAnyRole('ADMIN','FACULTY','STUDENT')")
 	public ResponseEntity<?> getAllUsers() {
 
 		List<Course> courses=courseService.getAllCourses();
@@ -98,6 +94,7 @@ public class CourseController {
 
 	
 	@GetMapping("/course/{cid}")
+	@PreAuthorize("hasAnyRole('ADMIN','FACULTY','STUDENT')")
 	public ResponseEntity<?> getSingleCourse(@PathVariable("cid") String cid) {
 		try {
 			return new ResponseEntity<>(courseService.getCourse(cid), HttpStatus.OK);
@@ -107,6 +104,7 @@ public class CourseController {
 	}
 	
 	@PutMapping("/course/{cid}")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> updateCourseByCid(@PathVariable("cid") String cid, @RequestBody Course course) {
 		try {
 			courseService.updateCourse(cid, course);
@@ -121,6 +119,7 @@ public class CourseController {
 	}
 	
 	@DeleteMapping("/course/{courseCode}")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<?> deleteCourseByCid(@PathVariable("courseCode") String courseCode) {
 		try {
 			courseService.deleteByCourseCode(courseCode);

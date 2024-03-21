@@ -1,5 +1,6 @@
 package com.timetable.universityTimetable.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -19,7 +20,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.timetable.universityTimetable.exception.TimeTableCollectionException;
+import com.timetable.universityTimetable.modelclass.Enrollment;
 import com.timetable.universityTimetable.modelclass.Timetable;
+import com.timetable.universityTimetable.repository.EnrollmentRepository;
 import com.timetable.universityTimetable.repository.TimeTableRepository;
 import com.timetable.universityTimetable.service.TimeTableService;
 
@@ -36,14 +39,10 @@ public class TimeTableController {
 	@Autowired
 	private TimeTableService timeTableService;
 
-	
-	@GetMapping("/Timetable")
-	public ResponseEntity<?> getFaculties() {
+	@Autowired
+	private EnrollmentRepository enrollRepo;
 
-		List<Timetable> timetables=timeTableService.getAllTimetables();
-		return new ResponseEntity<>(timetables,timetables.size()>0 ? HttpStatus.OK : HttpStatus.NOT_FOUND);
-			
-	}
+	
 	@PostMapping("/Timetable")
 	public ResponseEntity<?> createFaculty(@RequestBody @Valid  Timetable timetable,  BindingResult result) {
 		if (result.hasErrors()) {
@@ -54,18 +53,27 @@ public class TimeTableController {
 	        return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
 	    }
 		
+//		try {
+//	    	timeTableService.createTimeTable(timetable);
+//	       
+//	    	return ResponseEntity.ok().body(Map.of("message", "Timetable successfully saved", "success", true));
+//	    } catch (ConstraintViolationException e) {
+//	        return new ResponseEntity<>("Error creating Timetable: " + e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
+//	    }catch (TimeTableCollectionException e) {
+//			//return new ResponseEntity<>(e.getMessage(),HttpStatus.CONFLICT);
+//	    	return ResponseEntity.status(HttpStatus.CONFLICT)
+//                    .body(Map.of("message", "Timetable saved unsuccessful: " + e.getMessage(), "success", false));
+//		}
 		try {
-	    	timeTableService.createTimeTable(timetable);
-	       
-	    	return ResponseEntity.ok().body(Map.of("message", "Timetable successfully saved", "success", true));
-	    } catch (ConstraintViolationException e) {
-	        return new ResponseEntity<>("Error creating Timetable: " + e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
-	    }catch (TimeTableCollectionException e) {
-			//return new ResponseEntity<>(e.getMessage(),HttpStatus.CONFLICT);
-	    	return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body(Map.of("message", "Timetable saved unsuccessful: " + e.getMessage(), "success", false));
-		}
-	}
+            timeTableService.createTimeTable(timetable);
+            return new ResponseEntity<>(timetable, HttpStatus.OK);
+        } catch (ConstraintViolationException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
+        } catch (TimeTableCollectionException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+        }
+    }
+	
 	
 	@GetMapping("/Timetable/{ttid}")
 	public ResponseEntity<?> getSingleTimeTable(@PathVariable("ttid") String ttid) {
@@ -98,5 +106,40 @@ public class TimeTableController {
 		} catch (TimeTableCollectionException e) {
 	        return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
 		}
+		
 	}
+	
+	 @GetMapping("/student-timetables/{studId}")
+	    public ResponseEntity<?> getStudentTimetables(@PathVariable("studentId") String studentId) {
+	        try {
+	            // Get the enrolled courses of the student from the enrollment repository
+	            List<Enrollment> enrollments = enrollRepo.existingCourses(studentId);
+	            
+	            // Initialize a list to store timetables for enrolled courses
+	            List<Timetable> studentTimetables = new ArrayList<>();
+	            
+	            // Iterate through the enrolled courses
+	            for (Enrollment enrollment : enrollments) {
+	                // Get the course details for each enrollment
+	              //  Optional<String> optionalCourse = Optional.ofNullable(enrollment.getCourseId());
+	   
+	                    
+	                    // Get the timetables for the course
+	                    List<Timetable> courseTimetables = timeTableRepo.findByTimetableCourseId(enrollment.getCourseCode());
+	                    
+	                    // Add the course timetables to the list of student timetables
+	                    studentTimetables.addAll(courseTimetables);
+	                
+	            }
+	            
+	            // Check if any timetables were found for the student's enrolled courses
+	            if (!studentTimetables.isEmpty()) {
+	                return new ResponseEntity<>(studentTimetables, HttpStatus.OK);
+	            } else {
+	                return new ResponseEntity<>("No timetables available for the student's enrolled courses", HttpStatus.NOT_FOUND);
+	            }
+	        } catch (Exception e) {
+	            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+	        }
+	    }
 }

@@ -10,7 +10,7 @@ import com.timetable.universityTimetable.modelclass.Classroom;
 
 
 @Repository
-public interface ClassRoomMgtAndBooikingRepository extends MongoRepository<Classroom, String>{
+public interface ClassRoomRepository extends MongoRepository<Classroom, String>{
 	@Query("{'classroomCode': ?0}")
     Optional<Classroom> findByClassroomCode(String classroomCode);
 	

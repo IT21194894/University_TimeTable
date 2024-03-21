@@ -22,9 +22,9 @@ import com.timetable.universityTimetable.exception.UniTimetableCollectionExcepti
 import com.timetable.universityTimetable.exception.UserCollectionException;
 import com.timetable.universityTimetable.modelclass.Classroom;
 import com.timetable.universityTimetable.modelclass.User;
-import com.timetable.universityTimetable.repository.ClassRoomMgtAndBooikingRepository;
+import com.timetable.universityTimetable.repository.ClassRoomRepository;
 import com.timetable.universityTimetable.repository.UserRepository;
-import com.timetable.universityTimetable.service.ClassroomMgtAndBookingService;
+import com.timetable.universityTimetable.service.ClassroomService;
 //import com.timetable.universityTimetable.service.UserService;
 
 import jakarta.validation.ConstraintViolationException;
@@ -35,14 +35,14 @@ import jakarta.validation.Valid;
 public class ClassRoomController {
 	
 	@Autowired
-	private ClassRoomMgtAndBooikingRepository classRepo;
+	private ClassRoomRepository classRepo;
 	
 	@Autowired
-	private ClassroomMgtAndBookingService classService;
+	private ClassroomService classService;
 
 	@GetMapping("/classroom")
 	public ResponseEntity<?> getAllClassRooms() {
-
+		
 		List<Classroom> classRooms=classService.getAllClassRooms();
 		return new ResponseEntity<>(classRooms,classRooms.size()>0 ? HttpStatus.OK : HttpStatus.NOT_FOUND);
 			

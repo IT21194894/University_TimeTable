@@ -10,7 +10,6 @@ import jakarta.validation.ConstraintViolationException;
 
 public interface TimeTableService {
 	public void createTimeTable(Timetable timeTable)throws ConstraintViolationException, TimeTableCollectionException;
-	public List<Timetable> getAllTimetables();
 	
 	public Timetable getTimetable(String ttid) throws TimeTableCollectionException;
 	

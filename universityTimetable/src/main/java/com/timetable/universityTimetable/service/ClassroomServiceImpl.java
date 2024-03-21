@@ -11,16 +11,16 @@ import org.springframework.stereotype.Service;
 
 import com.timetable.universityTimetable.exception.UniTimetableCollectionException;
 import com.timetable.universityTimetable.modelclass.Classroom;
-import com.timetable.universityTimetable.repository.ClassRoomMgtAndBooikingRepository;
+import com.timetable.universityTimetable.repository.ClassRoomRepository;
 
 
 import jakarta.validation.ConstraintViolationException;
 
 @Service
-public class ClassroomMgtAndBookingServiceImpl implements ClassroomMgtAndBookingService {
+public class ClassroomServiceImpl implements ClassroomService {
 	
 	@Autowired
-	public ClassRoomMgtAndBooikingRepository classRoomRepo;
+	public ClassRoomRepository classRoomRepo;
 	
 	@Override
 	public List<Classroom> getAllClassRooms() {

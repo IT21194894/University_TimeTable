@@ -92,7 +92,6 @@ public class CourseServiceImpl implements CourseService {
 	            courseUpdate.setCourseName(course.getCourseName());
 	            courseUpdate.setCredit(course.getCredit());
 	            courseUpdate.setDescription(course.getDescription());
-	            courseUpdate.setFaculty(course.getFaculty());
 	            courseUpdate.setUpdatedAt  (new Date(System.currentTimeMillis()));
 	            courseRepo.save(courseUpdate);
 	        } else {

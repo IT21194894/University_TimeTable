@@ -34,9 +34,7 @@ public class Course {
 	
 	@NotNull(message= "Credit cannot be null")
 	private String credit;
-	 
-	private String facultyCode;
-	
+	 	
 	
 	@CreatedDate
 	private Date createdAt;
@@ -82,14 +80,6 @@ public class Course {
 
     public void setCredit(String credit) {
         this.credit = credit;
-    }
-    
-    public String getFaculty() {
-        return facultyCode;
-    }
-
-    public void setFaculty(String faculty) {
-        this.facultyCode = faculty;
     }
     
     public Date getCreatedAt() {

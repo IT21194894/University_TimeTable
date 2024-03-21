@@ -15,7 +15,7 @@ public void createEnrollment(Enrollment enrollment)throws ConstraintViolationExc
 	
 	public Enrollment getEnrollment(String enrollid) throws UniTimetableCollectionException;
 	
-	public void updateEnrollment(String enrollid, Enrollment enrollment) throws UniTimetableCollectionException;
+//	public void updateEnrollment(String enrollid, Enrollment enrollment) throws UniTimetableCollectionException;
 	
 	public void deleteEnrollment(String enrollid) throws UniTimetableCollectionException;
 }
