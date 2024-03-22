@@ -1,4 +1,7 @@
 package com.timetable.universityTimetable.modelclass;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -73,10 +76,10 @@ public class User {
   }
 
   public Set<Role> getRoles() {
-    return roles;
-  }
+	    return roles;
+	  }
 
-  public void setRoles(Set<Role> roles) {
-    this.roles = roles;
-  }
+	  public void setRoles(Set<Role> roles) {
+	    this.roles = roles;
+	  }
 }

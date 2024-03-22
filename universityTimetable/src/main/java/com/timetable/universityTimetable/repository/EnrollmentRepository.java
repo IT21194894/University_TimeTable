@@ -16,4 +16,7 @@ public interface EnrollmentRepository extends MongoRepository<Enrollment, String
 	
 	@Query("{'studId': ?0}")
 	List<Enrollment> existingCourses(String studId);
+
+	List<Enrollment> findByStudId(String studentId);
+
 }

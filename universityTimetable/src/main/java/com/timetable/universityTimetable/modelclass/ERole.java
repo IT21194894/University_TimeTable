@@ -1,8 +1,7 @@
 package com.timetable.universityTimetable.modelclass;
 
 public enum ERole {
-	  ROLE_USER,
-	  ROLE_MODERATOR,
+	  ROLE_STUDENT,
+	  ROLE_FACULTY,
 	  ROLE_ADMIN
-
-}
+	}

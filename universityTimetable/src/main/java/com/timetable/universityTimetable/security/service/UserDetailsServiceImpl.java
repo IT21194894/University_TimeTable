@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.timetable.universityTimetable.modelclass.User;
 import com.timetable.universityTimetable.repository.UserRepository;
 
+
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
   @Autowired
@@ -23,5 +24,4 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     return UserDetailsImpl.build(user);
   }
-
 }

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,6 +49,7 @@ public class BookingController {
 	    private BookingService bookingService;
 	    
 	    @GetMapping("/bookings")
+	    @PreAuthorize("hasRole('FACULTY')")
 	    public ResponseEntity<?> getAllBookings() {
 	    	List<Booking> bookings=bookingService.getAllBookings();
 	        return new ResponseEntity<>(bookings, bookings.size() > 0 ? HttpStatus.OK : HttpStatus.NOT_FOUND);
@@ -77,37 +79,37 @@ public class BookingController {
 
 		}
 		
-		public boolean checkClassroomAvailability(String classroomName, String startTimeStr, String endTimeStr, String dayOfWeekStr) {
-	        // Parse the start time, end time, and day of the week strings into appropriate objects
-	        LocalTime startTime = LocalTime.parse(startTimeStr);
-	        LocalTime endTime = LocalTime.parse(endTimeStr);
-	      //  String dayOfWeek = dayOfWeekStr.toUpperCase();
-
-	        // Query the database to fetch existing bookings for the given classroom and day of the week
-	        List<Booking> existingBookings = bookingRepo.findByClassroomNameAndDayOfWeek(classroomName, dayOfWeekStr);
-
-
-	        // Check for conflicts with existing bookings
-	        for (Booking booking : existingBookings) {
-	            // Parse booking start time and end time
-	            LocalTime bookingStartTime = LocalTime.parse(booking.getStartTime());
-	            LocalTime bookingEndTime = LocalTime.parse(booking.getEndTime());
-
-	            // Check if the booking is on the same day of the week
-	            if (!booking.getDay().equalsIgnoreCase(dayOfWeekStr)) {
-	                continue; // Skip if booking is not on the same day of the week
-	            }
-
-	            // Check for overlap between the time intervals
-	            if (startTime.isBefore(bookingEndTime) && endTime.isAfter(bookingStartTime)) {
-	                // Conflict found
-	                return false;
-	            }
-	        }
-
-	        // No conflicts found, classroom is available
-	        return true;
-	    }
+//		public boolean checkClassroomAvailability(String classroomName, String startTimeStr, String endTimeStr, String dayOfWeekStr) {
+//	        // Parse the start time, end time, and day of the week strings into appropriate objects
+//	        LocalTime startTime = LocalTime.parse(startTimeStr);
+//	        LocalTime endTime = LocalTime.parse(endTimeStr);
+//	      //  String dayOfWeek = dayOfWeekStr.toUpperCase();
+//
+//	        // Query the database to fetch existing bookings for the given classroom and day of the week
+//	        List<Booking> existingBookings = bookingRepo.findByClassroomNameAndDayOfWeek(classroomName, dayOfWeekStr);
+//
+//
+//	        // Check for conflicts with existing bookings
+//	        for (Booking booking : existingBookings) {
+//	            // Parse booking start time and end time
+//	            LocalTime bookingStartTime = LocalTime.parse(booking.getStartTime());
+//	            LocalTime bookingEndTime = LocalTime.parse(booking.getEndTime());
+//
+//	            // Check if the booking is on the same day of the week
+//	            if (!booking.getDay().equalsIgnoreCase(dayOfWeekStr)) {
+//	                continue; // Skip if booking is not on the same day of the week
+//	            }
+//
+//	            // Check for overlap between the time intervals
+//	            if (startTime.isBefore(bookingEndTime) && endTime.isAfter(bookingStartTime)) {
+//	                // Conflict found
+//	                return false;
+//	            }
+//	        }
+//
+//	        // No conflicts found, classroom is available
+//	        return true;
+//	    }
 	    
 	    @PutMapping("/bookings/{bookingId}")
 	    public ResponseEntity<?> updateBooking(@PathVariable("bookingId") String bookingId, @RequestBody Booking booking) {
@@ -133,6 +135,7 @@ public class BookingController {
 	    }
 	    
 	    @GetMapping("/available-classrooms")
+	    @PreAuthorize("hasRole('FACULTY')")
 		  public ResponseEntity<?> getAvailableClassrooms(@RequestParam String startTime,
 		                                                  @RequestParam String endTime,
 		                                                  @RequestParam String dayOfWeek) {

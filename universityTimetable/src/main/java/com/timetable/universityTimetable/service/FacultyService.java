@@ -17,4 +17,8 @@ public interface FacultyService {
 	public void updateFaculty(String fid, Faculty faculty) throws FacultyCollectionException;
 	
 	public void deleteByFacultyCode(String facultyCode) throws FacultyCollectionException;
+	
+	public List<String> getAssignedCoursesForUsername(String facultyUserName);
+	
+	public List<String> getAssignedFacultyForCourse(String courseCode) ;
 }

@@ -1,5 +1,6 @@
 package com.timetable.universityTimetable.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -11,8 +12,14 @@ import com.timetable.universityTimetable.modelclass.Faculty;
 @Repository
 public interface FacultyRepository extends MongoRepository<Faculty, String> {
 
-	@Query("{'facultyCode': ?0}")
-    Optional<Faculty> findByFacultyCode(String string);
+	@Query("{'facultyuserName': ?0}")
+    Optional<Faculty> findByFacultyuserName(String facultyUserName);
 	
-	void deleteByFacultyCode(String facultyCode);
+    boolean existsByCourseCodeAndFacultyuserName(String courseCode, String facultyUserName);
+
+    @Query("{'courseCode': ?0}")
+	List<Faculty> findByCourseCode(String courseCode);
+	
+    @Query("{'facultyUserName': ?0}")
+	List<Faculty>findByFacuserName(String facultyuserName);
 }

@@ -39,8 +39,8 @@ public class CourseController {
 
 	
 	@GetMapping("/course")
-	@PreAuthorize("hasAnyRole('ADMIN','FACULTY','STUDENT')")
-	public ResponseEntity<?> getAllUsers() {
+	@PreAuthorize("hasRole('FACULTY')")
+	public ResponseEntity<?> getAllCourses() {
 
 		List<Course> courses=courseService.getAllCourses();
 		return new ResponseEntity<>(courses,courses.size()>0 ? HttpStatus.OK : HttpStatus.NOT_FOUND);

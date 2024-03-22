@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.timetable.universityTimetable.exception.UniTimetableCollectionException;
@@ -13,6 +16,7 @@ import com.timetable.universityTimetable.modelclass.Course;
 import com.timetable.universityTimetable.modelclass.Enrollment;
 import com.timetable.universityTimetable.repository.CourseRepository;
 import com.timetable.universityTimetable.repository.EnrollmentRepository;
+import com.timetable.universityTimetable.security.service.UserDetailsImpl;
 
 import jakarta.validation.ConstraintViolationException;
 
@@ -26,31 +30,73 @@ public class EnrollementServiceImpl implements EnrollmentService {
     public CourseRepository courseRepo;
 	
 	@Override
-	public void createEnrollment(Enrollment enrollment) throws ConstraintViolationException, UniTimetableCollectionException {
-		Optional<Course> course = courseRepo.findByCourseCode(enrollment.getCourseCode());
-		Optional<Enrollment> enrollOpt = enrollmentRepo.findById(enrollment.getStudId());
+    public void createEnrollment(Enrollment enrollment) throws ConstraintViolationException, UniTimetableCollectionException {
+		UserDetailsImpl userDetails = getAuthenticatedUser();
+	    if (!isStudent(userDetails)) {
+	        throw new UniTimetableCollectionException("Only students are allowed to enroll.");
+	    }
+	    Optional<Course> course = courseRepo.findByCourseCode(enrollment.getCourseCode());
+	    Optional<Enrollment> enrollOpt = enrollmentRepo.findById(userDetails.getId());
 	    if (!course.isPresent()) {
 	        throw new ConstraintViolationException("Course with code " + enrollment.getCourseCode() + " not found", null);
 	    }
-       if(!(course.isPresent()&&enrollOpt.isPresent())){
-		enrollment.setCreatedAt(new Date(System.currentTimeMillis()));
-	            enrollmentRepo.save(enrollment);
-       }
-       else {
-    	   throw new UniTimetableCollectionException(UniTimetableCollectionException.EnrollmentAlreadyExist());
-       }
-
-	}
+	    if (!(course.isPresent() && enrollOpt.isPresent())) {
+	        enrollment.setStudId(userDetails.getId());
+	        enrollment.setCreatedAt(new Date(System.currentTimeMillis()));
+	        enrollmentRepo.save(enrollment);
+	    } else{
+	        throw new UniTimetableCollectionException(UniTimetableCollectionException.EnrollmentAlreadyExist());
+	    }
+    }
 
 	@Override
-	public List<Enrollment> getAllEnrollments() {
-		 List<Enrollment> enrollments = enrollmentRepo.findAll();
-	        if (enrollments.size() > 0) {
-	            return enrollments;
-	        } else {
-	            return new ArrayList<Enrollment>();
-	        }
+    public List<Enrollment> getAllEnrollments() {
+        UserDetailsImpl userDetails = getAuthenticatedUser();
+
+        // Check if the user is a student
+        if (isStudent(userDetails)) {
+            return enrollmentRepo.findByStudId(userDetails.getId());
+        } else if (isAdmin(userDetails)){
+            return enrollmentRepo.findAll();
+        }else {
+        	return new ArrayList<>();
+        }
+    }
+	
+	private boolean isStudent(UserDetailsImpl userDetails) {
+	    return userDetails.getAuthorities().stream()
+	            .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_STUDENT"));
 	}
+	
+	private boolean isAdmin(UserDetailsImpl userDetails) {
+	    return userDetails.getAuthorities().stream()
+	            .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
+	}
+	private UserDetailsImpl getAuthenticatedUser() {
+	    Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	    if (principal instanceof UserDetails) {
+	        return (UserDetailsImpl) principal;
+	    } else {
+	        throw new UsernameNotFoundException("User not authenticated");
+	    }
+	}
+//	@Override
+//	public void createEnrollment(Enrollment enrollment) throws ConstraintViolationException, UniTimetableCollectionException {
+//		//UserDetailsImpl userDetails = getAuthenticatedUser();
+//		Optional<Course> course = courseRepo.findByCourseCode(enrollment.getCourseCode());
+//		Optional<Enrollment> enrollOpt = enrollmentRepo.findById(enrollment.getStudId());
+//	    if (!course.isPresent()) {
+//	        throw new ConstraintViolationException("Course with code " + enrollment.getCourseCode() + " not found", null);
+//	    }
+//       if(!(course.isPresent()&&enrollOpt.isPresent())){
+//		enrollment.setCreatedAt(new Date(System.currentTimeMillis()));
+//	            enrollmentRepo.save(enrollment);
+//       }
+//       else {
+//    	   throw new UniTimetableCollectionException(UniTimetableCollectionException.EnrollmentAlreadyExist());
+//       }
+//
+//	}
 
 	@Override
 	public Enrollment getEnrollment(String enrollid) throws UniTimetableCollectionException {
@@ -93,5 +139,7 @@ public class EnrollementServiceImpl implements EnrollmentService {
         }
 
 	}
+	
+	
 
 }

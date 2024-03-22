@@ -8,6 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +27,7 @@ import com.timetable.universityTimetable.modelclass.Enrollment;
 import com.timetable.universityTimetable.repository.CourseRepository;
 import com.timetable.universityTimetable.repository.EnrollmentRepository;
 import com.timetable.universityTimetable.repository.UserRepository;
+import com.timetable.universityTimetable.security.service.UserDetailsImpl;
 import com.timetable.universityTimetable.service.EnrollmentService;
 
 import jakarta.validation.ConstraintViolationException;
@@ -45,18 +50,47 @@ public class EnrollmentController {
 	    
 	    @GetMapping("/enrollment")
 	    public ResponseEntity<?> getAllEnrollments() {
-	    	List<Enrollment> enrollments = enrollmentRepo.findAll();
-	        if (enrollments.size() > 0) {
-	            return new ResponseEntity<List<Enrollment>>(enrollments, HttpStatus.OK);
+	        UserDetailsImpl userDetails = getAuthenticatedUser();
+
+	        // Check if the user is a student
+	        if (isStudent(userDetails)) {
+	            List<Enrollment> enrollments = enrollmentRepo.findByStudId(userDetails.getId());
+	            return ResponseEntity.ok(enrollments);
+	        } else if (isAdmin(userDetails)){
+	            List<Enrollment> enrollments = enrollmentRepo.findAll();
+	            return ResponseEntity.ok(enrollments);
 	        } else {
-	            return new ResponseEntity("No enrollments available", HttpStatus.NOT_FOUND);
+	            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+	                                 .body("Unauthorized access"); // Return an unauthorized error message
 	        }
 	    }
 
+//	    @PostMapping("/enrollment")
+//	    public ResponseEntity<?> createEnrollment(@RequestBody @Valid Enrollment enrollment, BindingResult result) {
+//	        if (result.hasErrors()) {
+//	            // If there are validation errors, return a response with the error details
+//	            List<String> errors = result.getAllErrors().stream()
+//	                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+//	                    .collect(Collectors.toList());
+//	            return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+//	        }
+//
+//	        try {
+//	            enrollmentService.createEnrollment(enrollment);
+//	            return ResponseEntity.ok().body(Map.of("message", "Enrollment created successfully", "success", true));
+//	        } catch (ConstraintViolationException e) {
+//	            return new ResponseEntity<>("Error creating enrollment: " + e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
+//	        } catch (UniTimetableCollectionException e) {
+//	        	return ResponseEntity.status(HttpStatus.CONFLICT)
+//	                    .body(Map.of("message", "Enrollment unsuccessful: " + e.getMessage(), "success", false));
+//	        } 
+//	        
+//	    }
+
+	    
 	    @PostMapping("/enrollment")
 	    public ResponseEntity<?> createEnrollment(@RequestBody @Valid Enrollment enrollment, BindingResult result) {
 	        if (result.hasErrors()) {
-	            // If there are validation errors, return a response with the error details
 	            List<String> errors = result.getAllErrors().stream()
 	                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
 	                    .collect(Collectors.toList());
@@ -69,12 +103,19 @@ public class EnrollmentController {
 	        } catch (ConstraintViolationException e) {
 	            return new ResponseEntity<>("Error creating enrollment: " + e.getMessage(), HttpStatus.UNPROCESSABLE_ENTITY);
 	        } catch (UniTimetableCollectionException e) {
-	        	return ResponseEntity.status(HttpStatus.CONFLICT)
+	            return ResponseEntity.status(HttpStatus.CONFLICT)
 	                    .body(Map.of("message", "Enrollment unsuccessful: " + e.getMessage(), "success", false));
-	        } 
-	        
+	        }
 	    }
 
+//	    private UserDetailsImpl getAuthenticatedUser() {
+//	        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//	        if (principal instanceof UserDetails) {
+//	            return (UserDetailsImpl) principal;
+//	        } else {
+//	            throw new UsernameNotFoundException("User not authenticated");
+//	        }
+//	    }
 	    @GetMapping("/enrollment/{enrollId}")
 	    public ResponseEntity<?> getEnrollment(@PathVariable("enrollmentId") String enrollmentId) {
 	        try {
@@ -106,4 +147,24 @@ public class EnrollmentController {
 	            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
 	        }
 	    }
+	    
+	    private UserDetailsImpl getAuthenticatedUser() {
+		    Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		    if (principal instanceof UserDetails) {
+		        return (UserDetailsImpl) principal;
+		    } else {
+		        throw new UsernameNotFoundException("User not authenticated");
+		    }
+		}
+		
+		private boolean isStudent(UserDetailsImpl userDetails) {
+		    return userDetails.getAuthorities().stream()
+		            .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_STUDENT"));
+		}
+		private boolean isAdmin(UserDetailsImpl userDetails) {
+		    return userDetails.getAuthorities().stream()
+		            .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
+		}
+	    
+	    
 }

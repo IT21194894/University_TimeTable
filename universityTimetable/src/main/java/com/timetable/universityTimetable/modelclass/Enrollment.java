@@ -22,7 +22,7 @@ public class Enrollment {
 	@Id
 	private String enrollId;
 	
-	@NotNull(message= "StudentId cannot be null")
+	//@NotNull(message= "StudentId cannot be null")
 	private String studId;
 	
 	@NotNull(message= "CourseCode cannot be null")
@@ -72,4 +72,6 @@ public class Enrollment {
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+	
 }

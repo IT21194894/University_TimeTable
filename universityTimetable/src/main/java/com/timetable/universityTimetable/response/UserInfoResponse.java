@@ -8,8 +8,7 @@ public class UserInfoResponse {
   private String email;
   private List<String> roles;
 
-
-  public UserInfoResponse(String id, String username, String email, List<String> roles ) {
+  public UserInfoResponse(String id, String username, String email, List<String> roles) {
     this.id = id;
     this.username = username;
     this.email = email;
@@ -43,5 +42,4 @@ public class UserInfoResponse {
   public List<String> getRoles() {
     return roles;
   }
-
 }

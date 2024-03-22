@@ -26,19 +26,22 @@ public class Timetable {
 	private String courseCode;
 	
 
-	private String day;
+	//private String day;
 	
-	@NotNull(message= "Start Time cannot be null")
-	private String startTime;
+//	@NotNull(message= "Start Time cannot be null")
+//	private String startTime;
+//	
+//	@NotNull(message= "End Time cannot be null")
+//	private String endTime;
 	
-	@NotNull(message= "End Time cannot be null")
-	private String endTime;
+//	@NotNull(message= "Faculty cannot be null")
+//	private String facultyCode;
 	
-	@NotNull(message= "Faculty cannot be null")
-	private String facultyCode;
+//	@NotNull(message= "ClassCode cannot be null")
+//	private String classCode;
 	
-	@NotNull(message= "ClassCode cannot be null")
-	private String classCode;
+	@NotNull(message= "Booking Id cannot be null")
+	private String bookingCode;
 	
 	@CreatedDate
 	private Date createdAt;
@@ -61,36 +64,45 @@ public class Timetable {
     public void setCourseCode(String courseCode) {
         this.courseCode = courseCode;
     }
-    public String getStartTime() {
-        return startTime;
+//    public String getStartTime() {
+//        return startTime;
+//    }
+//    
+//    public void setStartTime(String startTime) {
+//        this.startTime = startTime;
+//    }
+//    
+//    public String getEndTime() {
+//        return endTime;
+//    }
+//    
+//    public void setEndTime(String endTime) {
+//        this.endTime = endTime;
+//    }
+//    public String getFacultyCode() {
+//        return facultyCode;
+//    }
+//    
+//    public void setFacultyCode(String facultyCode) {
+//        this.facultyCode = facultyCode;
+//    }
+    
+//    public String getClassCode() {
+//        return classCode;
+//    }
+//    
+//    public void setClassCode(String classCode) {
+//        this.classCode = classCode;
+//    }
+    
+    public String getBookingCode() {
+        return bookingCode;
     }
     
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
+    public void setBookingCode(String bookingCode) {
+        this.bookingCode = bookingCode;
     }
     
-    public String getEndTime() {
-        return endTime;
-    }
-    
-    public void setEndTime(String endTime) {
-        this.endTime = endTime;
-    }
-    public String getFacultyCode() {
-        return facultyCode;
-    }
-    
-    public void setFacultyCode(String facultyCode) {
-        this.facultyCode = facultyCode;
-    }
-    
-    public String getClassCode() {
-        return classCode;
-    }
-    
-    public void setClassCode(String classCode) {
-        this.classCode = classCode;
-    }
     public Date getCreatedAt() {
         return createdAt;
     }

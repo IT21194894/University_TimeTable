@@ -27,10 +27,10 @@ public class Role {
   }
 
   public ERole getName() {
-    return name;
-  }
+	    return name;
+	  }
 
-  public void setName(ERole name) {
-    this.name = name;
-  }
+	  public void setName(ERole name) {
+	    this.name = name;
+	  }
 }

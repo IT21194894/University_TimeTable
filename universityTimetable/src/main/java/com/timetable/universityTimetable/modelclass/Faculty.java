@@ -22,11 +22,11 @@ public class Faculty {
 	@Id
 	private String fid;
 	
-	@NotNull(message= "Faculty Code cannot be null")
-	private String facultyCode;
+	@NotNull(message= "Faculty User Name cannot be null")
+	private String facultyuserName;
 	
-	@NotNull(message= "Faculty Name cannot be null")
-	private String facultyName;
+	@NotNull(message= "Course Code cannot be null")
+	private String courseCode;
 	
 	
 	@CreatedDate
@@ -44,20 +44,20 @@ public class Faculty {
         this.fid = fid;
     }
     
-    public String getFacultyCode() {
-        return facultyCode;
+    public String getFacultyuserName() {
+        return facultyuserName;
     }
 
-    public void setFacultyCode(String facultyCode) {
-        this.facultyCode = facultyCode;
+    public void setFacultyuserName(String facultyuserName) {
+        this.facultyuserName = facultyuserName;
     }
     
-    public String getFacultyName() {
-        return facultyName;
+    public String getCourseCode() {
+        return courseCode;
     }
 
-    public void setFacultyName(String facultyName) {
-        this.facultyName = facultyName;
+    public void setCourseCode(String courseCode) {
+        this.courseCode = courseCode;
     }
     
     public Date getCreatedAt() {
