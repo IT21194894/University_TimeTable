@@ -36,11 +36,12 @@ public class EnrollementServiceImpl implements EnrollmentService {
 	        throw new UniTimetableCollectionException("Only students are allowed to enroll.");
 	    }
 	    Optional<Course> course = courseRepo.findByCourseCode(enrollment.getCourseCode());
-	    Optional<Enrollment> enrollOpt = enrollmentRepo.findById(userDetails.getId());
+	   
 	    if (!course.isPresent()) {
 	        throw new ConstraintViolationException("Course with code " + enrollment.getCourseCode() + " not found", null);
 	    }
-	    if (!(course.isPresent() && enrollOpt.isPresent())) {
+	    boolean enrollOpt = enrollmentRepo.existsByStudentIdAndCourseId(userDetails.getId(),enrollment.getCourseCode());
+	    if (!enrollOpt) {
 	        enrollment.setStudId(userDetails.getId());
 	        enrollment.setCreatedAt(new Date(System.currentTimeMillis()));
 	        enrollmentRepo.save(enrollment);

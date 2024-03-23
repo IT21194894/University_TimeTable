@@ -72,6 +72,7 @@ public AuthenticationManager authenticationManager(AuthenticationConfiguration a
   return authConfig.getAuthenticationManager();
 }
 
+
 @Bean
 public PasswordEncoder passwordEncoder() {
   return new BCryptPasswordEncoder();

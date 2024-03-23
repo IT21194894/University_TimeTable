@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.timetable.universityTimetable.exception.UniTimetableCollectionException;
@@ -14,6 +17,7 @@ import com.timetable.universityTimetable.modelclass.Booking;
 import com.timetable.universityTimetable.modelclass.Classroom;
 import com.timetable.universityTimetable.repository.BookingRepository;
 import com.timetable.universityTimetable.repository.ClassRoomRepository;
+import com.timetable.universityTimetable.security.service.UserDetailsImpl;
 
 import jakarta.validation.ConstraintViolationException;
 
@@ -82,22 +86,46 @@ public class BookingServiceImpl implements BookingService {
 		    }
 	}
 
+//	@Override
+//	public void createBooking(Booking booking) throws ConstraintViolationException, UniTimetableCollectionException {
+//	    Optional<Classroom> existingRoom = classRoomRepo.findByClassroomCode(booking.getClassCode());
+//	    if (existingRoom.isPresent()) {
+//	        // Check if the classroom is available for booking
+//	        boolean isAvailable = checkClassroomAvailability(booking.getClassCode(), booking.getStartTime(), booking.getEndTime(), booking.getDay());
+//	        if (!isAvailable) {
+//	            throw new UniTimetableCollectionException("Classroom " + booking.getClassCode() + " is not available at the given time slot");
+//	        }
+//	        // Proceed with booking
+//	        booking.setCreatedAt(new Date(System.currentTimeMillis()));
+//	        bookingRepo.save(booking);
+//	        
+//	    } else {
+//	        throw new UniTimetableCollectionException("Room not found");
+//	    }
+//	}
+	
 	@Override
 	public void createBooking(Booking booking) throws ConstraintViolationException, UniTimetableCollectionException {
-	    Optional<Classroom> existingRoom = classRoomRepo.findByClassroomCode(booking.getClassCode());
-	    if (existingRoom.isPresent()) {
-	        // Check if the classroom is available for booking
-	        boolean isAvailable = checkClassroomAvailability(booking.getClassCode(), booking.getStartTime(), booking.getEndTime(), booking.getDay());
-	        if (!isAvailable) {
-	            throw new UniTimetableCollectionException("Classroom " + booking.getClassCode() + " is not available at the given time slot");
-	        }
-	        // Proceed with booking
-	        booking.setCreatedAt(new Date(System.currentTimeMillis()));
-	        bookingRepo.save(booking);
-	        
-	    } else {
-	        throw new UniTimetableCollectionException("Room not found");
+	    UserDetailsImpl userDetails = getAuthenticatedUser();
+	    if (!isFaculty(userDetails) && !isAdmin(userDetails)) {
+	        throw new UniTimetableCollectionException("Only faculty or admin users are allowed to create bookings.");
 	    }
+
+	    Optional<Classroom> existingRoom = classRoomRepo.findByClassroomCode(booking.getClassCode());
+	    if (!existingRoom.isPresent()) {
+	        throw new UniTimetableCollectionException("Classroom " + booking.getClassCode() + " not found");
+	    }
+
+	    // Check if the classroom is available for booking
+	    boolean isAvailable = checkClassroomAvailability(booking.getClassCode(), booking.getStartTime(), booking.getEndTime(), booking.getDay());
+	    if (!isAvailable) {
+	        throw new UniTimetableCollectionException("Classroom " + booking.getClassCode() + " is not available at the given time slot");
+	    }
+
+	    // Proceed with booking
+	    booking.setBookedBy(userDetails.getUsername()); // Set the username who created the booking
+	    booking.setCreatedAt(new Date(System.currentTimeMillis()));
+	    bookingRepo.save(booking);
 	}
 
 
@@ -134,5 +162,24 @@ public class BookingServiceImpl implements BookingService {
         // No conflicts found, classroom is available
         return true;
 	}
+	
+	public boolean isFaculty(UserDetailsImpl userDetails) {
+	    return userDetails.getAuthorities().stream()
+	            .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_FACULTY"));
+	}
+	
+	public boolean isAdmin(UserDetailsImpl userDetails) {
+	    return userDetails.getAuthorities().stream()
+	            .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
+	}
+	public UserDetailsImpl getAuthenticatedUser() {
+	    Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+	    if (principal instanceof UserDetails) {
+	        return (UserDetailsImpl) principal;
+	    } else {
+	        throw new UsernameNotFoundException("User not authenticated");
+	    }
+	}
+	
 
 }

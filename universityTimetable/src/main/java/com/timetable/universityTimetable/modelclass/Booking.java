@@ -39,7 +39,7 @@ public class Booking {
 	@NotNull(message= "location cannot be null")
 	private String classCode;
 	
-	@NotNull(message = "Can't input null value")
+
 	private String bookedBy;
 	
 	@NotNull(message = "Can't input null value")

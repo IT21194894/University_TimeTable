@@ -74,6 +74,10 @@ public class UserDetailsImpl implements UserDetails {
   public String getUsername() {
     return username;
   }
+  
+  public void setId(String id) {
+      this.id = id;
+  }
 
   @Override
   public boolean isAccountNonExpired() {
